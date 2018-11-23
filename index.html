@@ -5,12 +5,12 @@
 	<title>街のうつりかわりマップ</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- leaflet.js -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
 	 crossorigin="" />
 	<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
 	 crossorigin=""></script>
-	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
 
 	<!-- jquery & jqueryui -->
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -18,6 +18,10 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 	 crossorigin="anonymous"></script>
+
+	<!-- lightbox -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
 
 	<style>
 		html,
@@ -27,14 +31,15 @@
 		}
 
 		#map {
-			width: 600px;
-			height: 400px;
+			width: 1200px;
+			height: 800px;
 		}
 
 		#slider {
 			margin: 20px 0;
 			width: 600px;
 		}
+
 		.ui-slider .ui-slider-handle {
 			width: 3em;
 		}
@@ -49,9 +54,35 @@
 		var catA = L.layerGroup();
 		var catB = L.layerGroup();
 
-		var pointa = L.marker([35.8067, 139.66953]).bindPopup('This is Point A.').addTo(catA),
-			pointb = L.marker([35.8077, 139.66963]).bindPopup('This is Point B.').addTo(catB),
-			pointc = L.marker([35.8067, 139.67073]).bindPopup('This is Point C.').addTo(catA);
+		var greenIcon = L.icon({
+			iconUrl: 'img/000027803.png',
+
+			iconSize: [60, 60], // size of the icon
+			iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
+			popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+		});
+
+		// marker定義
+		L.marker([35.810628, 139.663530], {
+				icon: greenIcon
+			}).addTo(catA)
+			.bindPopup(
+				"<a href='img/戸田町立新曽小学校.jpg'data-lightbox='20171217'title='戸田町立新曽小学校'><img src='img/戸田町立新曽小学校.jpg' width='100%' height='100%' /><a href='img/nizo.jpg'data-lightbox='20171217'title='戸田市立新曽小学校'></a></a><br>戸田市立新曽小学校"
+			).openPopup();
+
+		L.marker([35.805836, 139.680565], {
+				icon: greenIcon
+			}).addTo(catA)
+			.bindPopup(
+				"<a href='img/戸田南小学校.jpg'data-lightbox='20171217'><img src='img/戸田南小学校.jpg' width='100%' height='100%'title='戸田南小学校' /></a><a href='img/126486_1_462_327_3.jpg' data-lightbox='20171217'title='戸田南小学校'></a></a><br>戸田南小学校"
+			).openPopup();
+
+		L.marker([35.812817, 139.676958], {
+				icon: greenIcon
+			}).addTo(catA)
+			.bindPopup(
+				"<a href='img/戸田町立第一小学校.jpg'data-lightbox='20171217'title='img/戸田町立第一小学校'><img src='img/戸田町立第一小学校.jpg' width='100%' height='100%' /></a><a href='img/1869427_1_418_276_3.jpg'data-lightbox='20171217'title='戸田市立第一小学校'></a></a><br>戸田町立第一小学校"
+			).openPopup();
 
 		// URL設定
 		var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -80,7 +111,7 @@
 		};
 		L.control.layers(baseLayers, overlays).addTo(map);
 	</script>
-	
+
 	<div id="slider">
 		<div id="custom-handle" class="ui-slider-handle"></div>
 	</div>
@@ -88,17 +119,16 @@
 		$(function () {
 			var handle = $("#custom-handle");
 			$("#slider").slider({
-				value: 2018, 	// 初期値
-				min: 1900,		// 最小
-				max: 2018,		// 最大
+				value: 2018, // 初期値
+				min: 1900, // 最小
+				max: 2018, // 最大
 				create: function () {
 					handle.text($(this).slider("value"));
 				},
 				slide: function (event, ui) {
 					handle.text(ui.value);
 				},
-				change: function (event, ui) {
-				}
+				change: function (event, ui) {}
 			});
 		});
 	</script>
