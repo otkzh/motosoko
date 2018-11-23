@@ -11,6 +11,14 @@
 	 crossorigin=""></script>
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+
+	<!-- jquery & jqueryui -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+	 crossorigin="anonymous"></script>
+
 	<style>
 		html,
 		body {
@@ -21,6 +29,14 @@
 		#map {
 			width: 600px;
 			height: 400px;
+		}
+
+		#slider {
+			margin: 20px 0;
+			width: 600px;
+		}
+		.ui-slider .ui-slider-handle {
+			width: 3em;
 		}
 	</style>
 
@@ -63,6 +79,28 @@
 			"カテゴリB": catB
 		};
 		L.control.layers(baseLayers, overlays).addTo(map);
+	</script>
+	
+	<div id="slider">
+		<div id="custom-handle" class="ui-slider-handle"></div>
+	</div>
+	<script>
+		$(function () {
+			var handle = $("#custom-handle");
+			$("#slider").slider({
+				value: 2018, 	// 初期値
+				min: 1900,		// 最小
+				max: 2018,		// 最大
+				create: function () {
+					handle.text($(this).slider("value"));
+				},
+				slide: function (event, ui) {
+					handle.text(ui.value);
+				},
+				change: function (event, ui) {
+				}
+			});
+		});
 	</script>
 </body>
 
