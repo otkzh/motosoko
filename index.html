@@ -31,18 +31,23 @@
 		}
 
 		#map {
-			width: 1200px;
-			height: 800px;
+            width: 80vw;
+            height: 80vh;
+            margin: 0 auto;
 		}
 
 		#slider {
-			margin: 20px 0;
-			width: 600px;
+            width: 80vw;
+            margin: 20px auto;
 		}
 
 		.ui-slider .ui-slider-handle {
 			width: 3em;
 		}
+
+        .thumbnail {
+            width: 180px;
+        }
 	</style>
 
 </head>
@@ -54,35 +59,58 @@
 		var catA = L.layerGroup();
 		var catB = L.layerGroup();
 
-		var greenIcon = L.icon({
-			iconUrl: 'img/000027803.png',
-
-			iconSize: [60, 60], // size of the icon
-			iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
-			popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
-		});
-
 		// marker定義
-		L.marker([35.810628, 139.663530], {
-				icon: greenIcon
-			}).addTo(catA)
-			.bindPopup(
-				"<a href='img/戸田町立新曽小学校.jpg'data-lightbox='20171217'title='戸田町立新曽小学校'><img src='img/戸田町立新曽小学校.jpg' width='100%' height='100%' /><a href='img/nizo.jpg'data-lightbox='20171217'title='戸田市立新曽小学校'></a></a><br>戸田市立新曽小学校"
-			).openPopup();
+        var dataA = [];
+        var dataB = [];
+        var url = 'https://script.google.com/macros/s/AKfycbwOx-16KY-VT06YZE1eyvcyxTFtpGnON8hwts_7UWUG5YuOHJM/exec?s=';
+        var getMarkers = function (dest, cat, sheet) {
+            $.get(url + sheet, function (data) {
+                data.forEach(function (facility) {
+                    dest.push(facility);
+                });
+                createMarkers(dest, cat);
+            });
+        };
+        var createMarkers = function (data, cat) {
+            cat.clearLayers();
+            data.forEach(function (facility) {
+                console.log('e:' + facility.established);
+                console.log('z:' + $('#slider').slider('value'));
+                if (!facility.established ||
+                    ($('#slider').slider('value') >= facility.established)) {
+                    addMarker(facility, cat);
+                }
+            });
+        };
+        var addMarker = function (facility, cat) {
+            var content = '';
+            if (facility.img1) {
+                content += '<a href="' + facility.img1 + '" data-lightbox="' + facility.name + '" data-title="' + facility.name + '">';
+                content += '<img src="' + facility.img1 + '" class="thumbnail"/></a>';
+                if (facility.img2) {
+                    content += '<a href="' + facility.img2 + '" data-lightbox="' + facility.name + '" data-title="' + facility.name + '"></a>';
+                }
+                if (facility.img3) {
+                    content += '<a href="' + facility.img3 + '" data-lightbox="' + facility.name + '" data-title="' + facility.name + '"></a>';
+                }
+                content += '<br>';
+            }
+            content += facility.name;
 
-		L.marker([35.805836, 139.680565], {
-				icon: greenIcon
-			}).addTo(catA)
-			.bindPopup(
-				"<a href='img/戸田南小学校.jpg'data-lightbox='20171217'><img src='img/戸田南小学校.jpg' width='100%' height='100%'title='戸田南小学校' /></a><a href='img/126486_1_462_327_3.jpg' data-lightbox='20171217'title='戸田南小学校'></a></a><br>戸田南小学校"
-			).openPopup();
+			var icon = L.icon({
+				iconUrl: facility.icon,
 
-		L.marker([35.812817, 139.676958], {
-				icon: greenIcon
-			}).addTo(catA)
-			.bindPopup(
-				"<a href='img/戸田町立第一小学校.jpg'data-lightbox='20171217'title='img/戸田町立第一小学校'><img src='img/戸田町立第一小学校.jpg' width='100%' height='100%' /></a><a href='img/1869427_1_418_276_3.jpg'data-lightbox='20171217'title='戸田市立第一小学校'></a></a><br>戸田町立第一小学校"
-			).openPopup();
+				iconSize: [60, 60], // size of the icon
+				iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
+				popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+			});
+
+            L.marker([facility.latitude, facility.longitude], {
+                icon: icon
+            }).addTo(cat).bindPopup(content);
+        };
+        getMarkers(dataA, catA, 'education');
+        getMarkers(dataB, catB, 'parks');
 
 		// URL設定
 		var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -128,7 +156,10 @@
 				slide: function (event, ui) {
 					handle.text(ui.value);
 				},
-				change: function (event, ui) {}
+				change: function (event, ui) {
+                    createMarkers(dataA, catA);
+                    createMarkers(dataB, catB);
+				}
 			});
 		});
 	</script>
