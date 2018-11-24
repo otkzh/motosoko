@@ -154,8 +154,11 @@
 		var map = L.map('map', {
 			center: [35.8126, 139.6682],
 			zoom: 14,
-			layers: [osm, gsi]
+			layers: [osm]
 		});
+		map.addLayer(catA);
+		map.addLayer(catB);
+		
 
 		var baseLayers = {
 			"OpenStreetMap": osm,
