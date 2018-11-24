@@ -48,6 +48,48 @@
         .thumbnail {
             width: 180px;
         }
+
+		#cover {
+			width: 100vw;
+			height: 100vh;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1000;
+			background-color: #666;
+			text-align: center;
+		}
+		#cover .title {
+			font-size: 48px;
+			color: #ffffff;
+			width: 100%;
+			margin: 40px auto;
+		}
+		#cover .team {
+			font-size: 32px;
+			color: #ffff;
+			position: absolute;
+			bottom: 40px;
+			left:50%;
+			transform:translateX(-50%);
+		}
+		#cover .frame {
+			width: 40vw;
+			background-color: #fff;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateY(-50%) translateX(-50%);
+		}
+		#cover .pic {
+			width: 100%;
+			margin: 20px;
+		}
+		#cover .logo {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+		}
 	</style>
 
 </head>
@@ -160,6 +202,22 @@
                     createMarkers(dataA, catA);
                     createMarkers(dataB, catB);
 				}
+			});
+		});
+	</script>
+
+	<div id="cover">
+		<div class="title">街のうつりかわりマップ</div>
+		<div class="frame">
+			<img class="pic" src="img/戸田町立第一小学校.jpg">
+		</div>
+		<div class="team">チームMOTOSOKO</div>
+		<img class="logo" src="img/logo.png">
+	</div>
+	<script>
+		$(function() {
+			$('#cover').on('click', function() {
+				$('#cover').hide('slide', { direction: "up" }, 1000);
 			});
 		});
 	</script>
