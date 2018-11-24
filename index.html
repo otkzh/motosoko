@@ -142,9 +142,9 @@
 			var icon = L.icon({
 				iconUrl: facility.icon,
 
-				iconSize: [60, 60], // size of the icon
+				iconSize: [30, 30], // size of the icon
 				iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
-				popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+				popupAnchor: [0, 0] // point from which the popup should open relative to the iconAnchor
 			});
 
             L.marker([facility.latitude, facility.longitude], {
@@ -176,8 +176,8 @@
 		};
 
 		var overlays = {
-			"カテゴリA": catA,
-			"カテゴリB": catB
+			"学校施設": catA,
+			"公園": catB
 		};
 		L.control.layers(baseLayers, overlays).addTo(map);
 	</script>
